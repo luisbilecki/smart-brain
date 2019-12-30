@@ -22,13 +22,12 @@ class ProfileIcon extends Component {
   }
 
   render() {
-    const { toggle, state, props } = this;
-    const { onRouteChange } = props;
-    const { dropdownOpen } = state;
+    const { onRouteChange, toggleModal } = this.props;
+    const { dropdownOpen } = this.state;
 
     return (
-      <div className="pa4 tc">
-        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+      <div className='pa4 tc'>
+        <Dropdown isOpen={dropdownOpen} toggle={this.toggle}>
           <DropdownToggle
             tag="span"
             data-toggle="dropdown"
@@ -42,7 +41,7 @@ class ProfileIcon extends Component {
             right
             className="b--transparent shadow-5"
             style={{ marginTop: '20px', backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
-            <DropdownItem>View Profile</DropdownItem>
+            <DropdownItem onClick={() => toggleModal()}>View Profile</DropdownItem>
             <DropdownItem onClick={() => onRouteChange('signout')}>Sign Out</DropdownItem>
           </DropdownMenu>
         </Dropdown>
