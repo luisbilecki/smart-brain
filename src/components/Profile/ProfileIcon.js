@@ -22,7 +22,8 @@ class ProfileIcon extends Component {
   }
 
   render() {
-    const { toggle, state } = this;
+    const { toggle, state, props } = this;
+    const { onRouteChange } = props;
     const { dropdownOpen } = state;
 
     return (
@@ -37,10 +38,12 @@ class ProfileIcon extends Component {
                 src="http://tachyons.io/img/logo.jpg"
                 className="br-100 ba h3 w3 dib" alt="avatar" />
           </DropdownToggle>
-          <DropdownMenu className='b--transparent shadow-5'
+          <DropdownMenu
+            right
+            className="b--transparent shadow-5"
             style={{ marginTop: '20px', backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
             <DropdownItem>View Profile</DropdownItem>
-            <DropdownItem>Signout</DropdownItem>
+            <DropdownItem onClick={() => onRouteChange('signout')}>Sign Out</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
