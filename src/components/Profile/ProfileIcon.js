@@ -21,8 +21,27 @@ class ProfileIcon extends Component {
     }));
   }
 
+  handleSignOut = () => {
+    const token = window.sessionStorage.getItem('token');
+
+    fetch('http://localhost:3000/signout', {
+      method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+        .then(resp => resp.json())
+        .then(res => {
+          if (res.success) {
+            window.sessionStorage.removeItem('token');
+            this.props.onRouteChange('signout');
+          }
+        });
+  }
+
   render() {
-    const { onRouteChange, toggleModal } = this.props;
+    const { toggleModal } = this.props;
     const { dropdownOpen } = this.state;
 
     return (
@@ -42,7 +61,7 @@ class ProfileIcon extends Component {
             className="b--transparent shadow-5"
             style={{ marginTop: '20px', backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
             <DropdownItem onClick={() => toggleModal()}>View Profile</DropdownItem>
-            <DropdownItem onClick={() => onRouteChange('signout')}>Sign Out</DropdownItem>
+            <DropdownItem onClick={this.handleSignOut}>Sign Out</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
