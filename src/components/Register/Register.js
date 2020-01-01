@@ -1,6 +1,9 @@
 import React from 'react';
 import './Register.css';
 
+import { getProfile } from '../../api/profile';
+import { registerUser } from '../../api/register';
+
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -28,28 +31,14 @@ class Register extends React.Component {
   }
 
   onSubmitSignIn = () => {
-    fetch('http://localhost:3000/register', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-        name: this.state.name
-      })
-    })
-      .then(response => response.json())
+    const { name, email, password } = this.state;
+
+    registerUser(name, email, password)
       .then(data => {
         if (data.userId && data.success) {
           this.saveAuthTokenInSession(data.token);
 
-          fetch(`http://localhost:3000/profile/${data.userId}`, {
-            mehtod: 'get',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${data.token}`,
-            },
-          })
-            .then(resp => resp.json())
+          getProfile(data.userId, data.token)
             .then(user => {
               if (user && user.email) {
                 this.props.loadUser(user);

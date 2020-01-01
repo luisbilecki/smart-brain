@@ -11,6 +11,11 @@ import Modal from './components/Modal/Modal';
 import Profile from './components/Profile/Profile'
 import './App.css';
 
+import { getProfile } from './api/profile';
+import { signInWithToken } from './api/signin';
+import { updateEntries } from './api/image';
+import { processImageInput } from './api/imageurl';
+
 const particlesOptions = {
   particles: {
     number: {
@@ -53,24 +58,10 @@ class App extends Component {
     const token = this.getToken();
 
     if (token) {
-      fetch('http://localhost:3000/signin', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      })
-        .then(resp => resp.json())
+      signInWithToken(token)
         .then(data => {
           if (data && data.id) {
-            fetch(`http://localhost:3000/profile/${data.id}`, {
-              mehtod: 'get',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-              },
-            })
-              .then(resp => resp.json())
+            getProfile(data.id, token)
               .then(user => {
                 if (user && user.email) {
                   this.loadUser(user);
@@ -127,30 +118,10 @@ class App extends Component {
     const token = this.getToken();
 
     this.setState({ imageUrl: this.state.input });
-      fetch('http://localhost:3000/imageurl', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          input: this.state.input
-        })
-      })
-      .then(response => response.json())
+    processImageInput(token, this.state.input)
       .then(response => {
         if (response) {
-          fetch('http://localhost:3000/image', {
-            method: 'put',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              id: this.state.user.id
-            })
-          })
-            .then(response => response.json())
+          updateEntries(this.state.user.id, token)
             .then(count => {
               this.setState(Object.assign(this.state.user, { entries: count}))
             })

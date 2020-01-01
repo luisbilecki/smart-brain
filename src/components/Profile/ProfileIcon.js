@@ -6,6 +6,7 @@ import {
   DropdownItem
 } from 'reactstrap';
 
+import { signOut } from '../../api/signout';
 
 class ProfileIcon extends Component {
   constructor(props) {
@@ -24,14 +25,7 @@ class ProfileIcon extends Component {
   handleSignOut = () => {
     const token = window.sessionStorage.getItem('token');
 
-    fetch('http://localhost:3000/signout', {
-      method: 'delete',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      })
-        .then(resp => resp.json())
+    signOut(token)
         .then(res => {
           if (res.success) {
             window.sessionStorage.removeItem('token');

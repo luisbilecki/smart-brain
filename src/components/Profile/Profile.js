@@ -1,6 +1,8 @@
 import React from 'react';
 import './Profile.css';
 
+import { updateProfile } from '../../api/profile';
+
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -31,21 +33,13 @@ class Profile extends React.Component {
     const { user, toggleModal, loadUser } = this.props;
     const token = window.sessionStorage.getItem('token');
 
-    fetch(`http://localhost:3000/profile/${user.id}`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        formInput: data,
-      })
-    }).then(resp => {
-      if (resp.status === 200 || resp.status === 304) {
-        toggleModal();
-        loadUser(Object.assign({}, user, data));
-      }
-    })
+    updateProfile(user.id, token, data)
+      .then(resp => {
+        if (resp.status === 200 || resp.status === 304) {
+          toggleModal();
+          loadUser(Object.assign({}, user, data));
+        }
+      });
   }
 
   render() {

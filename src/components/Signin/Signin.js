@@ -1,5 +1,9 @@
 import React from 'react';
 import './Signin.css';
+
+import { getProfile } from '../../api/profile';
+import { signInWithEmail } from '../../api/signin';
+
 class Signin extends React.Component {
   constructor(props) {
     super(props);
@@ -22,27 +26,14 @@ class Signin extends React.Component {
   }
 
   onSubmitSignIn = () => {
-    fetch('http://localhost:3000/signin', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email: this.state.signInEmail,
-        password: this.state.signInPassword
-      })
-    })
-      .then(response => response.json())
+    const { signInEmail, signInPassword } = this.state;
+
+    signInWithEmail(signInEmail, signInPassword)
       .then(data => {
         if (data.userId && data.success) {
           this.saveAuthTokenInSession(data.token);
 
-          fetch(`http://localhost:3000/profile/${data.userId}`, {
-            mehtod: 'get',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${data.token}`,
-            },
-          })
-            .then(resp => resp.json())
+          getProfile(data.userId, data.token)
             .then(user => {
               if (user && user.email) {
                 this.props.loadUser(user);
