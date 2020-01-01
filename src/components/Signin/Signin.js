@@ -4,6 +4,8 @@ import './Signin.css';
 import { getProfile } from '../../api/profile';
 import { signInWithEmail } from '../../api/signin';
 
+import { setToken } from '../../helpers/token';
+
 class Signin extends React.Component {
   constructor(props) {
     super(props);
@@ -21,17 +23,13 @@ class Signin extends React.Component {
     this.setState({signInPassword: event.target.value})
   }
 
-  saveAuthTokenInSession = (token) => {
-    window.sessionStorage.setItem('token', token);
-  }
-
   onSubmitSignIn = () => {
     const { signInEmail, signInPassword } = this.state;
 
     signInWithEmail(signInEmail, signInPassword)
       .then(data => {
         if (data.userId && data.success) {
-          this.saveAuthTokenInSession(data.token);
+          setToken(data.token);
 
           getProfile(data.userId, data.token)
             .then(user => {

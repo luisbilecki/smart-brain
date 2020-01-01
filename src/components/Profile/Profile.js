@@ -3,6 +3,8 @@ import './Profile.css';
 
 import { updateProfile } from '../../api/profile';
 
+import { getToken } from '../../helpers/token';
+
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -31,7 +33,7 @@ class Profile extends React.Component {
 
   onProfileUpdate = (data) => {
     const { user, toggleModal, loadUser } = this.props;
-    const token = window.sessionStorage.getItem('token');
+    const token = getToken();
 
     updateProfile(user.id, token, data)
       .then(resp => {

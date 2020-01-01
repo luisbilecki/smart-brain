@@ -8,6 +8,8 @@ import {
 
 import { signOut } from '../../api/signout';
 
+import { getToken, removeToken } from '../../helpers/token';
+
 class ProfileIcon extends Component {
   constructor(props) {
     super(props);
@@ -23,12 +25,12 @@ class ProfileIcon extends Component {
   }
 
   handleSignOut = () => {
-    const token = window.sessionStorage.getItem('token');
+    const token = getToken();
 
     signOut(token)
         .then(res => {
           if (res.success) {
-            window.sessionStorage.removeItem('token');
+            removeToken();
             this.props.onRouteChange('signout');
           }
         });

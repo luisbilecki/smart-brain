@@ -16,6 +16,8 @@ import { signInWithToken } from './api/signin';
 import { updateEntries } from './api/image';
 import { processImageInput } from './api/imageurl';
 
+import { getToken } from './helpers/token';
+
 const particlesOptions = {
   particles: {
     number: {
@@ -52,10 +54,8 @@ class App extends Component {
     this.state = initialState;
   }
 
-  getToken = () => window.sessionStorage.getItem('token');
-
   componentDidMount() {
-    const token = this.getToken();
+    const token = getToken();
 
     if (token) {
       signInWithToken(token)

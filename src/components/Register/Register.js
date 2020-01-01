@@ -4,6 +4,8 @@ import './Register.css';
 import { getProfile } from '../../api/profile';
 import { registerUser } from '../../api/register';
 
+import { setToken } from '../../helpers/token';
+
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -26,17 +28,13 @@ class Register extends React.Component {
     this.setState({password: event.target.value})
   }
 
-  saveAuthTokenInSession = (token) => {
-    window.sessionStorage.setItem('token', token);
-  }
-
   onSubmitSignIn = () => {
     const { name, email, password } = this.state;
 
     registerUser(name, email, password)
       .then(data => {
         if (data.userId && data.success) {
-          this.saveAuthTokenInSession(data.token);
+          setToken(data.token);
 
           getProfile(data.userId, data.token)
             .then(user => {
