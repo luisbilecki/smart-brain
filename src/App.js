@@ -91,7 +91,7 @@ class App extends Component {
       entries: data.entries,
       joined: data.joined,
       pet: data.pet,
-      age: data.pet,
+      age: data.age,
     }})
   }
 
