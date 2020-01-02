@@ -52,6 +52,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = initialState;
+    console.log(process.env);
   }
 
   componentDidMount() {

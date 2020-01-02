@@ -5,6 +5,10 @@ Final project for Udemy course
 2. Run `npm install`
 3. Run `npm start`
 
+## NOTE
+
+This app uses a serverless function to return the emoji according a rank.
+The code of serverless function can be found here: https://github.com/luisbilecki/rank-serverless-for-smartbrain
 
 # TODO Notes (luis.bilecki):
 
